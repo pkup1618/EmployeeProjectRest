@@ -14,9 +14,8 @@ import com.example.demo.view.IndicatorView;
 public interface IndicatorRepository extends Repository<Indicator, IndicatorId> {
 
     @Query(rowMapperClass = MetricViewRowMapper.class, value = """
-        SELECT metric.name, COUNT(metric.employeeId) as employeeCount, AVG(metric.`value`) as averageKpi FROM metric
-        GROUP BY metric.name
-        """)
+    SELECT metric.name, COUNT(metric.employeeId) as employeeCount, AVG(metric.`value`) as averageKpi FROM metric
+    GROUP BY metric.name""")
     List<IndicatorView> findAllWithAvgValue(String order);
 }
 
