@@ -15,13 +15,13 @@ public class IndicatorView {
     @Setter private Long bossId;
     private Long value;
     @Setter private Long employeeCount;
-    private Long averageKpi;
+    private Double averageKpi;
 
-    public void setAverageKpi(Long averageKpi) {
+    public void setAverageKpi(Double averageKpi) {
         if (averageKpi < 0) {
-            this.averageKpi = 0L;
+            this.averageKpi = 0.0;
         } else if (averageKpi > 100) {
-            this.averageKpi = 100L;
+            this.averageKpi = 100.0;
         } else {
             this.averageKpi = averageKpi;
         }

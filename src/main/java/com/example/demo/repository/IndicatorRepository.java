@@ -13,20 +13,20 @@ import com.example.demo.view.IndicatorView;
 
 public interface IndicatorRepository extends Repository<Indicator, IndicatorId> {
 
-    @Query(rowMapperClass = MetricViewRowMapper.class, value = """
-    SELECT metric.name, COUNT(metric.employeeId) as employeeCount, AVG(metric.`value`) as averageKpi FROM metric
-    GROUP BY metric.name""")
-    List<IndicatorView> findAllWithAvgValue(String order);
+    @Query(rowMapperClass = IndicatorViewRowMapper.class, value = """
+    SELECT indicator.name, COUNT(indicator.employeeId) as employeeCount, ROUND(AVG(indicator.`value`), 2) as averageKpi FROM indicator
+    GROUP BY indicator.name""")
+    List<IndicatorView> findAllWithAvgValue();
 }
 
-class MetricViewRowMapper implements RowMapper<IndicatorView> {
+class IndicatorViewRowMapper implements RowMapper<IndicatorView> {
 
     @Override
     public IndicatorView mapRow(ResultSet rs, int rowNum) throws SQLException {
         IndicatorView indicatorView = new IndicatorView();
         indicatorView.setName(rs.getString("name"));
         indicatorView.setEmployeeCount(rs.getLong("employeeCount"));
-        indicatorView.setAverageKpi(rs.getLong("averageKpi"));
+        indicatorView.setAverageKpi(rs.getDouble("averageKpi"));
 
         return indicatorView;
     }
