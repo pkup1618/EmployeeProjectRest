@@ -27,8 +27,9 @@ public interface EmployeeRepository extends Repository<Employee, Long> {
     SELECT employeesIndicators .id, employeesIndicators.name, ROUND(AVG(employeesIndicators.`value`),2) as averageKpi FROM
     (SELECT employee.id, employee.name, indicator.`value` FROM employee, indicator
     WHERE indicator.employeeId = employee.id) employeesIndicators 
-    GROUP BY employeesIndicators.name""")
-    List<EmployeeView> findAllWithAverageKpi();
+    GROUP BY employeesIndicators.name 
+    ORDER BY averageKpi :order""")
+    List<EmployeeView> findAllWithAverageKpi(String order);
 }
 
 class EmployeeIdNameRSExtr implements ResultSetExtractor<List<EmployeeView>> {

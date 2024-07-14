@@ -13,10 +13,17 @@ import com.example.demo.view.IndicatorView;
 
 public interface IndicatorRepository extends Repository<Indicator, IndicatorId> {
 
+    /*
+     * Насколько я понимаю, Spring не может конвертировать аргумент метода и подставить его в запрос
+     * Я также пытался сделать это при помощи NamedParameterJdbcTemplate, неудачно
+     * 
+     * Передавая в качестве значения ASC или DESC - не работает
+     */
     @Query(rowMapperClass = IndicatorViewRowMapper.class, value = """
     SELECT indicator.name, COUNT(indicator.employeeId) as employeeCount, ROUND(AVG(indicator.`value`), 2) as averageKpi FROM indicator
-    GROUP BY indicator.name""")
-    List<IndicatorView> findAllWithAvgValue();
+    GROUP BY indicator.name 
+    ORDER BY averageKpi ?""")
+    List<IndicatorView> findAllWithAvgValue(String order);
 }
 
 class IndicatorViewRowMapper implements RowMapper<IndicatorView> {

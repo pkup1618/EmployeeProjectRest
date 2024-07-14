@@ -20,46 +20,7 @@ public class EmployeeService {
     }
 
     public List<EmployeeView> getAllEmployeesWithAverageKpi(String order) {
-        List<EmployeeView> employees = employeeRepository.findAllWithAverageKpi();
-
-        if (order == null) {
-            order = "";
-        }
-        
-        switch(order) {
-            case "asc": {
-                employees.sort(new Comparator<EmployeeView>() {
-
-                    @Override
-                    public int compare(EmployeeView o1, EmployeeView o2) {
-                        return Double.compare(o1.getAverageKpi(), o2.getAverageKpi());
-                    }
-                });
-                break;
-            }
-            case "desc": {
-                employees.sort(new Comparator<EmployeeView>() {
-
-                    @Override
-                    public int compare(EmployeeView o1, EmployeeView o2) {
-                        return 0 - Double.compare(o1.getAverageKpi(), o2.getAverageKpi());
-                    }
-                });
-                break;
-            }
-            default: {
-                employees.sort(new Comparator<EmployeeView>() {
-
-                    @Override
-                    public int compare(EmployeeView o1, EmployeeView o2) {
-                        return o1.getName().compareTo(o2.getName());
-                    }
-                });
-                break;
-            }
-        }
-            
-        return employees;
+        return employeeRepository.findAllWithAverageKpi(order.toUpperCase());
     }
 
     public EmployeeView getEmployeeWithSubordinates(Long id) throws ResourceNotFountException {
