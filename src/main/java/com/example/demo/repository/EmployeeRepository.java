@@ -24,12 +24,11 @@ public interface EmployeeRepository extends Repository<Employee, Long> {
     List<EmployeeView> findByIdWithSubordinates(Long id);
 
     @Query(resultSetExtractorClass = EmployeeIdNameAvgKpiRSExtr.class, value = """
-    SELECT employeesMetrics .id, employeesMetrics.name, AVG(employeesMetrics.`value`) as averageKpi FROM
-    (SELECT employee.id, employee.name, metric.`value` FROM employee, metric
-    WHERE metric.employeeId = employee.id) employeesMetrics 
-    GROUP BY employeesMetrics.name
-    ORDER BY :order""")
-    List<EmployeeView> findAllWithAverageKpi(String order);
+    SELECT employeesIndicators .id, employeesIndicators.name, ROUND(AVG(employeesIndicators.`value`),2) as averageKpi FROM
+    (SELECT employee.id, employee.name, indicator.`value` FROM employee, indicator
+    WHERE indicator.employeeId = employee.id) employeesIndicators 
+    GROUP BY employeesIndicators.name""")
+    List<EmployeeView> findAllWithAverageKpi();
 }
 
 class EmployeeIdNameRSExtr implements ResultSetExtractor<List<EmployeeView>> {
@@ -58,7 +57,7 @@ class EmployeeIdNameAvgKpiRSExtr implements ResultSetExtractor<List<EmployeeView
             EmployeeView employeeView = new EmployeeView();
             employeeView.setId(rs.getLong("id"));
             employeeView.setName(rs.getString("name"));
-            employeeView.setAverageKpi(rs.getLong("averageKpi"));
+            employeeView.setAverageKpi(rs.getDouble("averageKpi"));
             employeesView.add(employeeView);
         }
         return employeesView;
@@ -83,8 +82,6 @@ class EmployeeWithSubordinatesRSExtractor implements ResultSetExtractor<List<Emp
                 employeeView.setName(rs.getString("name"));
                 employeeWithSubordinatesView.add(employeeView);
             }
-        } else {
-            return null;
         }
 
         return employeeWithSubordinatesView;

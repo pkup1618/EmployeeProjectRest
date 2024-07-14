@@ -8,13 +8,22 @@ import lombok.Setter;
 
 
 @Getter
-@Setter
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EmployeeView {
-    private Long id;
-    private String name;
-    private Long bossId;
-    private List<EmployeeView> subordinates;
-    private Long averageKpi;
+    @Setter private Long id;
+    @Setter private String name;
+    @Setter private Long bossId;
+    @Setter private List<EmployeeView> subordinates;
+    private Double averageKpi;
+
+    public void setAverageKpi(Double averageKpi) {
+        if (averageKpi < 0) {
+            this.averageKpi = 0.0;
+        } else if (averageKpi > 100) {
+            this.averageKpi = 100.0;
+        } else {
+            this.averageKpi = averageKpi;
+        }
+    }
 }

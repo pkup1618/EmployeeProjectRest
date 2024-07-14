@@ -6,7 +6,7 @@ CREATE TABLE employee (
     FOREIGN KEY (bossId) REFERENCES employee (id)
 );
 
-CREATE TABLE metric (
+CREATE TABLE indicator (
     name VARCHAR(64),
     employeeId INTEGER,
     `value` INTEGER NOT NULL,
@@ -25,18 +25,25 @@ VALUES
 (1, 'Nikolai', 3);
 
 
-INSERT INTO metric
+INSERT INTO indicator
 VALUES
-('SoftSkills', 1, 20),
-('SoftSkills', 2, 40),
-('SoftSkills', 3, 60),
+('SoftSkills', 1, 46),
+('SoftSkills', 2, 90),
+('SoftSkills', 3, 95),
 ('SoftSkills', 4, 80),
 ('SoftSkills', 5, 100),
-('HardSkills', 5, 20),
-('HardSkills', 4, 40),
-('HardSkills', 3, 60),
-('HardSkills', 2, 80),
-('HardSkills', 1, 100);
+
+('Java', 5, 70),
+('Java', 4, 10),
+('Java', 3, 50),
+('Java', 2, 100),
+('Java', 1, 100),
+
+('JS', 5, 20),
+('JS', 4, 20),
+('JS', 3, 40),
+('JS', 2, 50),
+('JS', 1, 100);
 
 
 

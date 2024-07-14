@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@Table("metric")
+@Table("indicator")
 public class Indicator implements Persistable<IndicatorId>{
     @Id
-    private IndicatorId metricId;
+    private IndicatorId indicatorId;
 
     private Long value; // constraints 0-100
 
@@ -33,12 +33,12 @@ public class Indicator implements Persistable<IndicatorId>{
 
     @Override
     public IndicatorId getId() {
-        return getMetricId();
+        return getIndicatorId();
     }
 
     @PersistenceCreator
-    public Indicator(IndicatorId metricId, Long value) {
-        this.metricId = metricId;
+    public Indicator(IndicatorId indicatorId, Long value) {
+        this.indicatorId = indicatorId;
         this.value = value;
     }
 }

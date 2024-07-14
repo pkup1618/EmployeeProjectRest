@@ -21,10 +21,10 @@ public class IndicatorController {
         this.employeeService = employeeService;
     }
 
-    IndicatorService metricService;
+    IndicatorService indicatorService;
     @Autowired
-    public void setMetricService(IndicatorService metricService) {
-        this.metricService = metricService;
+    public void setIndicatorService(IndicatorService indicatorService) {
+        this.indicatorService = indicatorService;
     }
 
     EmployeeRepository employeeRepository;
@@ -34,12 +34,12 @@ public class IndicatorController {
     }
 
     @GetMapping("/kpiByEmployee")
-    public List<EmployeeView> getKpiByEmployee(@RequestParam(value = "order", required = false) String order) {
+    public List<EmployeeView> getKpiByEmployee(@RequestParam(value="order", required = false) String order) {
         return employeeService.getAllEmployeesWithAverageKpi(order);
     }
 
     @GetMapping("/kpi")
     public List<IndicatorView> getKpi(@RequestParam(value="order", required =  false) String order) {
-        return metricService.getAllIndicatorsWithAverageValue(order);
+        return indicatorService.getAllIndicatorsWithAverageValue(order);
     }
 }

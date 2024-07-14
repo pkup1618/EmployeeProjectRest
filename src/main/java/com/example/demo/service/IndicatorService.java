@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,44 @@ public class IndicatorService {
     }
 
     public List<IndicatorView> getAllIndicatorsWithAverageValue(String order) {
-        return indicatorRepository.findAllWithAvgValue(order);
+        List<IndicatorView> indicators = indicatorRepository.findAllWithAvgValue();
+
+        if (order == null) {
+            order = "";
+        }
+
+        switch(order) {
+            case "asc": {
+                indicators.sort(new Comparator<IndicatorView>() {
+
+                    @Override
+                    public int compare(IndicatorView o1, IndicatorView o2) {
+                        return Double.compare(o1.getAverageKpi(), o2.getAverageKpi());
+                    }
+                });
+                break;
+            }
+            case "desc": {
+                indicators.sort(new Comparator<IndicatorView>() {
+                    
+                    @Override
+                    public int compare(IndicatorView o1, IndicatorView o2) {
+                        return 0 - Double.compare(o1.getAverageKpi(), o2.getAverageKpi());
+                    }
+                });
+                break;
+            }
+            default: {
+                indicators.sort(new Comparator<IndicatorView>() {
+
+                    @Override
+                    public int compare(IndicatorView o1, IndicatorView o2) {
+                        return o1.getName().compareTo(o2.getName());
+                    }
+                });
+                break;
+            }
+        }
+        return indicators;
     }
 }
