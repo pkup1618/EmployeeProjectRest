@@ -76,8 +76,6 @@ public class EmployeeService {
     }
 
     public List<EmployeeView> getAllEmployees() {
-                // Запись лога
-                log.debug("ABUBAS");
         return employeeRepository.findAll();
     }
 
