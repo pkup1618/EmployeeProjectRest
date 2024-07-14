@@ -34,7 +34,7 @@ public class IndicatorController {
     }
 
     @GetMapping("/kpiByEmployee")
-    public List<EmployeeView> getKpiByEmployee(@RequestParam String order) {
+    public List<EmployeeView> getKpiByEmployee(@RequestParam(value="order", required = false) String order) {
         return employeeService.getAllEmployeesWithAverageKpi(order);
     }
 

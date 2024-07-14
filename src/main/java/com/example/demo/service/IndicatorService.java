@@ -22,14 +22,7 @@ public class IndicatorService {
         List<IndicatorView> indicators = indicatorRepository.findAllWithAvgValue();
 
         if (order == null) {
-            indicators.sort(new Comparator<IndicatorView>() {
-
-                @Override
-                public int compare(IndicatorView o1, IndicatorView o2) {
-                    return o1.getName().compareTo(o2.getName());
-                }
-            });
-            return indicators;
+            order = "";
         }
 
         switch(order) {
@@ -45,6 +38,7 @@ public class IndicatorService {
             }
             case "desc": {
                 indicators.sort(new Comparator<IndicatorView>() {
+                    
                     @Override
                     public int compare(IndicatorView o1, IndicatorView o2) {
                         return 0 - Double.compare(o1.getAverageKpi(), o2.getAverageKpi());
@@ -53,6 +47,13 @@ public class IndicatorService {
                 break;
             }
             default: {
+                indicators.sort(new Comparator<IndicatorView>() {
+
+                    @Override
+                    public int compare(IndicatorView o1, IndicatorView o2) {
+                        return o1.getName().compareTo(o2.getName());
+                    }
+                });
                 break;
             }
         }

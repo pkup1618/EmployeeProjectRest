@@ -4,7 +4,6 @@ import java.util.Comparator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.demo.exception.ResourceNotFountException;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.view.EmployeeView;
@@ -24,15 +23,7 @@ public class EmployeeService {
         List<EmployeeView> employees = employeeRepository.findAllWithAverageKpi();
 
         if (order == null) {
-            employees.sort(new Comparator<EmployeeView>() {
-
-                @Override
-                public int compare(EmployeeView o1, EmployeeView o2) {
-                    return o1.getName().compareTo(o2.getName());
-                }
-            });
-
-            return employees;
+            order = "";
         }
         
         switch(order) {
@@ -48,6 +39,7 @@ public class EmployeeService {
             }
             case "desc": {
                 employees.sort(new Comparator<EmployeeView>() {
+
                     @Override
                     public int compare(EmployeeView o1, EmployeeView o2) {
                         return 0 - Double.compare(o1.getAverageKpi(), o2.getAverageKpi());
@@ -56,6 +48,13 @@ public class EmployeeService {
                 break;
             }
             default: {
+                employees.sort(new Comparator<EmployeeView>() {
+
+                    @Override
+                    public int compare(EmployeeView o1, EmployeeView o2) {
+                        return o1.getName().compareTo(o2.getName());
+                    }
+                });
                 break;
             }
         }
@@ -77,6 +76,8 @@ public class EmployeeService {
     }
 
     public List<EmployeeView> getAllEmployees() {
+                // Запись лога
+                log.debug("ABUBAS");
         return employeeRepository.findAll();
     }
 
