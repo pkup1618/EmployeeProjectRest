@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+
 import java.util.Comparator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,10 @@ import com.example.demo.view.IndicatorView;
 @Service
 public class IndicatorService {
 
-    IndicatorRepository indicatorRepository;
-    
+    private final IndicatorRepository indicatorRepository;
+
     @Autowired
-    public void setIndicatorRepository(IndicatorRepository indicatorRepository) {
+    public IndicatorService(IndicatorRepository indicatorRepository) {
         this.indicatorRepository = indicatorRepository;
     }
 
@@ -27,33 +28,15 @@ public class IndicatorService {
 
         switch(order) {
             case "asc": {
-                indicators.sort(new Comparator<IndicatorView>() {
-
-                    @Override
-                    public int compare(IndicatorView o1, IndicatorView o2) {
-                        return Double.compare(o1.getAverageKpi(), o2.getAverageKpi());
-                    }
-                });
+                indicators.sort(Comparator.comparingDouble(IndicatorView::getAverageKpi));
                 break;
             }
             case "desc": {
-                indicators.sort(new Comparator<IndicatorView>() {
-                    
-                    @Override
-                    public int compare(IndicatorView o1, IndicatorView o2) {
-                        return 0 - Double.compare(o1.getAverageKpi(), o2.getAverageKpi());
-                    }
-                });
+                indicators.sort((o1, o2) -> -Double.compare(o1.getAverageKpi(), o2.getAverageKpi()));
                 break;
             }
             default: {
-                indicators.sort(new Comparator<IndicatorView>() {
-
-                    @Override
-                    public int compare(IndicatorView o1, IndicatorView o2) {
-                        return o1.getName().compareTo(o2.getName());
-                    }
-                });
+                indicators.sort(Comparator.comparing(IndicatorView::getName));
                 break;
             }
         }

@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.demo.exception.ResourceNotFountException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.view.EmployeeView;
 
@@ -28,33 +28,15 @@ public class EmployeeService {
         
         switch(order) {
             case "asc": {
-                employees.sort(new Comparator<EmployeeView>() {
-
-                    @Override
-                    public int compare(EmployeeView o1, EmployeeView o2) {
-                        return Double.compare(o1.getAverageKpi(), o2.getAverageKpi());
-                    }
-                });
+                employees.sort(Comparator.comparingDouble(EmployeeView::getAverageKpi));
                 break;
             }
             case "desc": {
-                employees.sort(new Comparator<EmployeeView>() {
-
-                    @Override
-                    public int compare(EmployeeView o1, EmployeeView o2) {
-                        return 0 - Double.compare(o1.getAverageKpi(), o2.getAverageKpi());
-                    }
-                });
+                employees.sort((o1, o2) -> -Double.compare(o1.getAverageKpi(), o2.getAverageKpi()));
                 break;
             }
             default: {
-                employees.sort(new Comparator<EmployeeView>() {
-
-                    @Override
-                    public int compare(EmployeeView o1, EmployeeView o2) {
-                        return o1.getName().compareTo(o2.getName());
-                    }
-                });
+                employees.sort(Comparator.comparing(EmployeeView::getName));
                 break;
             }
         }
@@ -62,11 +44,11 @@ public class EmployeeService {
         return employees;
     }
 
-    public EmployeeView getEmployeeWithSubordinates(Long id) throws ResourceNotFountException {
+    public EmployeeView getEmployeeWithSubordinates(Long id) throws ResourceNotFoundException {
         List<EmployeeView> employeeWithSubordinates = employeeRepository.findByIdWithSubordinates(id);
 
-        if (employeeWithSubordinates.size() == 0) {
-            throw new ResourceNotFountException("Resource Employee/" + id + " not found");
+        if (employeeWithSubordinates.isEmpty()) {
+            throw new ResourceNotFoundException("Resource Employee/" + id + " not found");
         } 
 
         EmployeeView employeeView = employeeWithSubordinates.remove(0);

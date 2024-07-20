@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.exception.ResourceNotFountException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.view.EmployeeView;
 import com.example.demo.view.ErrorView;
@@ -20,9 +20,10 @@ import com.example.demo.view.ErrorView;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-    EmployeeService employeeService;
+    private final EmployeeService employeeService;
+
     @Autowired
-    public void setEmployeeService(EmployeeService employeeService) {
+    public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 
@@ -32,13 +33,13 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public EmployeeView getEmployees(@PathVariable Long id) throws ResourceNotFountException {
+    public EmployeeView getEmployees(@PathVariable Long id) throws ResourceNotFoundException {
         return employeeService.getEmployeeWithSubordinates(id);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(ResourceNotFountException.class)
-    public ErrorView handleException(ResourceNotFountException e) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ErrorView handleException(ResourceNotFoundException e) {
         return new ErrorView(e.getMessage());
     }
 }
