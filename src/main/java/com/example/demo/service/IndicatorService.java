@@ -3,6 +3,7 @@ package com.example.demo.service;
 
 import java.util.Comparator;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.repository.IndicatorRepository;
@@ -26,17 +27,17 @@ public class IndicatorService {
             order = "";
         }
 
-        switch(order) {
+        switch (order) {
             case "asc": {
-                indicators.sort(Comparator.comparingDouble(IndicatorView::getAverageKpi));
+                indicators.sort(Comparator.comparingDouble(IndicatorView::averageKpi));
                 break;
             }
             case "desc": {
-                indicators.sort((o1, o2) -> -Double.compare(o1.getAverageKpi(), o2.getAverageKpi()));
+                indicators.sort((o1, o2) -> -Double.compare(o1.averageKpi(), o2.averageKpi()));
                 break;
             }
             default: {
-                indicators.sort(Comparator.comparing(IndicatorView::getName));
+                indicators.sort(Comparator.comparing(IndicatorView::name));
                 break;
             }
         }

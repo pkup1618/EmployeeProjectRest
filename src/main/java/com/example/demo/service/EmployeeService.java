@@ -1,63 +1,65 @@
 package com.example.demo.service;
 
+
 import java.util.Comparator;
 import java.util.List;
+
+import com.example.demo.view.EmployeeAvgKpiView;
+import com.example.demo.view.EmployeeIdNameView;
+import com.example.demo.view.EmployeeWithSubordinatesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.EmployeeRepository;
-import com.example.demo.view.EmployeeView;
 
 
 @Service
 public class EmployeeService {
-    
+
     EmployeeRepository employeeRepository;
-    
+
     @Autowired
     public void setEmployeeRepository(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
-    public List<EmployeeView> getAllEmployeesWithAverageKpi(String order) {
-        List<EmployeeView> employees = employeeRepository.findAllWithAverageKpi();
+    public List<EmployeeAvgKpiView> getAllEmployeesWithAverageKpi(String order) {
+        List<EmployeeAvgKpiView> employees = employeeRepository.findAllWithAverageKpi();
 
         if (order == null) {
             order = "";
         }
-        
-        switch(order) {
+
+        switch (order) {
             case "asc": {
-                employees.sort(Comparator.comparingDouble(EmployeeView::getAverageKpi));
+                employees.sort(Comparator.comparingDouble(EmployeeAvgKpiView::averageKpi));
                 break;
             }
             case "desc": {
-                employees.sort((o1, o2) -> -Double.compare(o1.getAverageKpi(), o2.getAverageKpi()));
+                employees.sort((o1, o2) -> -Double.compare(o1.averageKpi(), o2.averageKpi()));
                 break;
             }
             default: {
-                employees.sort(Comparator.comparing(EmployeeView::getName));
+                employees.sort(Comparator.comparing(EmployeeAvgKpiView::name));
                 break;
             }
         }
-            
+
         return employees;
     }
 
-    public EmployeeView getEmployeeWithSubordinates(Long id) throws ResourceNotFoundException {
-        List<EmployeeView> employeeWithSubordinates = employeeRepository.findByIdWithSubordinates(id);
+    public EmployeeWithSubordinatesView getEmployeeWithSubordinates(Long id) throws ResourceNotFoundException {
+        List<EmployeeWithSubordinatesView> employeeWithSubordinates = employeeRepository.findByIdWithSubordinates(id);
 
         if (employeeWithSubordinates.isEmpty()) {
             throw new ResourceNotFoundException("Resource Employee/" + id + " not found");
-        } 
+        }
 
-        EmployeeView employeeView = employeeWithSubordinates.remove(0);
-        employeeView.setSubordinates(employeeWithSubordinates);
-
-        return employeeView;
+        EmployeeWithSubordinatesView employee = employeeWithSubordinates.get(0);
+        return employee;
     }
 
-    public List<EmployeeView> getAllEmployees() {
+    public List<EmployeeIdNameView> getAllEmployees() {
         return employeeRepository.findAll();
     }
 
